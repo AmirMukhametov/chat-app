@@ -29,10 +29,12 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../chat-frontend/dist")));
+  const frontendDistPath = path.join(__dirname, "../chat-frontend/dist");
+  app.use(express.static(frontendDistPath));
 
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../chat-frontend", "dist", "index.html"));
+  // ✅ Исправлено: добавляем имя параметра
+  app.get("/:any", (req, res) => {
+    res.sendFile(path.join(frontendDistPath, "index.html"));
   });
 }
 
